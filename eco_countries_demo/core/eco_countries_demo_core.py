@@ -71,15 +71,21 @@ my_downloader = Downloader('modis',
                            layers,
                            True)
 downloaded_layers = my_downloader.download()['downloaded_files']
-print layers[0]
 print downloaded_layers
+print '/home/kalimaha/Desktop/MYD11C1/2015/001/' + layers[0]['file_name']
+processing[0]['source_path'] = ['/home/kalimaha/Desktop/MYD11C1/2015/001/' + layers[0]['file_name']]
+processing[0]['output_path'] = '/home/kalimaha/Desktop/MYD11C1/2015/001/PROCESSED/'
+print processing
 download_in_progress = True
-while download_in_progress:
-    try:
-        download_in_progress = my_downloader.progress(
-            layers[0])['download_size'] != my_downloader.progress(layers[0])['total_size']
-    except TypeError:
-        pass
-    except KeyError:
-        pass
+# while download_in_progress:
+#     try:
+#         print my_downloader.progress(layers[0])['total_size']
+#         download_in_progress = my_downloader.progress(layers[0])['download_size'] != my_downloader.progress(layers[0])['total_size']
+#     except TypeError:
+#         pass
+#     except KeyError:
+#         pass
+print 'Layer downloaded.'
+print 'Start processing...'
 processed_files = processing_core.process_data(processing)
+print 'Processing done.'
