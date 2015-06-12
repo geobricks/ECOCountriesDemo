@@ -1,0 +1,31 @@
+{
+   "name": "eco_countries_demo",
+   "label": {
+      "en": "ECO Countries Demo"
+   },
+   "language": "Python",
+   "description": "Data acquisition for the ECO Countries demo.",
+   "license": "GPL2",
+   "homepage": "http://geobricks.org/",
+   "keywords": [
+      "gis", "python", "modis", "download", "plugin"
+   ],
+   "version": "1.0.0",
+   "contributors": [
+      {
+         "name": "Simone Murzilli",
+         "email": "simone.murzilli@gmail.com"
+      },
+      {
+         "name": "Guido Barbaglia",
+         "email": "guido.barbaglia@gmail.com"
+      }
+   ],
+   "repository": {
+      "type": "git",
+      "url": "https://github.com/Kalimaha/ECOCountriesDemo"
+   },
+   "devDependencies": {
+      "grunt": "~0.4.5"
+   }
+}
