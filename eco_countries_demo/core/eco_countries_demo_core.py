@@ -1,6 +1,6 @@
 import os
 import shutil
-import glob
+import copy
 from geobricks_modis.core import modis_core as c
 from geobricks_processing.core import processing_core
 from geobricks_downloader.core.downloader_core import Downloader
@@ -19,7 +19,7 @@ class ECOCountriesDownloader:
 
     def download_ndvi(self):
         self.products = ['MOD13A2']
-        self.years = ['2015']
+        self.years = ['2010', '2011', '2012', '2013', '2014', '2015']
         self.countries = 'eco'
         self.__download('mod13a2')
 
@@ -30,14 +30,20 @@ class ECOCountriesDownloader:
         self.__download('myd11c1')
 
     def __download(self, product_code):
+
         if self.products is not None and self.years is not None and self.countries is not None:
             for p in self.products:
                 for y in self.years:
                     days = c.list_days(p, y)
 
                     for d in days:
+                        print 'DOWNLOADING ' + p + ' FOR ' + y + ', DAY: ' + d['code']
 
-                        processing[product_code][0]['source_path'] = None
+                        my_processing = copy.deepcopy(processing)
+
+                        my_processing[product_code][0]['source_path'] = None
+                        for tmp_out in my_processing[product_code]:
+                            tmp_out['output_path'] = None
                         if os.path.isdir(self.root + p + '/' + y + '/' + d['code'] + '/PROCESSED/'):
                             shutil.rmtree(self.root + p + '/' + y + '/' + d['code'] + '/PROCESSED/')
 
@@ -45,11 +51,12 @@ class ECOCountriesDownloader:
 
                         for l in layers:
                             try:
-                                processing[product_code][0]['source_path'].append(self.root + p + '/' + y + '/' + d['code'] + '/' + l['file_name'])
+                                my_processing[product_code][0]['source_path'].append(self.root + p + '/' + y + '/' + d['code'] + '/' + l['file_name'])
                             except Exception:
-                                processing[product_code][0]['source_path'] = []
-                                processing[product_code][0]['source_path'].append(self.root + p + '/' + y + '/' + d['code'] + '/' + l['file_name'])
-                        for tmp_out in processing[product_code]:
+                                my_processing[product_code][0]['source_path'] = []
+                                my_processing[product_code][0]['source_path'].append(self.root + p + '/' + y + '/' + d['code'] + '/' + l['file_name'])
+                        for tmp_out in my_processing[product_code]:
+                            print '!!! OUTPUT PATH: ' + self.root + p + '/' + y + '/' + d['code'] + '/PROCESSED/'
                             tmp_out['output_path'] = self.root + p + '/' + y + '/' + d['code'] + '/PROCESSED/'
 
                         my_downloader = Downloader('modis',
@@ -70,33 +77,30 @@ class ECOCountriesDownloader:
                                 pass
                         print 'Layer downloaded.'
 
-                        print 'Start processing...'
-                        processed_files = processing_core.process_data(processing[product_code])
-                        print processed_files
-                        print processed_files
-                        for f in glob.glob(self.root + p + '/' + y + '/' + d['code'] + '/PROCESSED/*'):
-                            if 'final.tif' not in f:
-                                os.remove(f)
+                        print 'Start my_processing...'
+                        try:
+                            print '##################################################'
+                            print '#                                                #'
+                            print '#                                                #'
+                            print '#                                                #'
+                            for s in my_processing[product_code][0]['source_path']:
+                                print '\t' + s
+                            print '#                                                #'
+                            print '#                                                #'
+                            print '#                                                #'
+                            print '##################################################'
+                            for proc in my_processing[product_code]:
+                                # processed_files = my_processing.process_data(my_processing[product_code])
+                                print proc
+                                proc["source_path"] = proc["source_path"] if "source_path" in proc else result
+                                result = processing_core.process_obj(proc)
+                                print result
+                            # processed_files = my_processing.process_data(processing[product_code])
+                        except Exception, e:
+                            print '##################################################'
+                            print e
+                            print '##################################################'
                         print 'Processing done.'
-
-            # for p in self.products:
-            #     for y in self.years:
-            #         days = [{'code': '001'}]
-            #         for d in days:
-            #             layers = c.list_layers_countries_subset(p, y, d['code'], self.countries)
-            #             for l in layers:
-            #                 try:
-            #                     processing['mod13a2'][0]['source_path'].append('/home/kalimaha/Desktop/' + p + '/' + y + '/' + d['code'] + '/' + l['file_name'])
-            #                 except Exception:
-            #                     processing['mod13a2'][0]['source_path'] = []
-            #                     processing['mod13a2'][0]['source_path'].append('/home/kalimaha/Desktop/' + p + '/' + y + '/' + d['code'] + '/' + l['file_name'])
-            #             for tmp_out in processing['mod13a2']:
-            #                 tmp_out['output_path'] = '/home/kalimaha/Desktop/' + p + '/' + y + '/' + d['code'] + '/PROCESSED/'
-            #         print processing['mod13a2'][0]['source_path']
-            #         print 'Start processing...'
-            #         processed_files = processing_core.process_data(processing['mod13a2'])
-            #         print processed_files
-            #         print 'Processing done.'
         else:
             if self.products is None:
                 raise Exception('Please provide a valid "products" array.')

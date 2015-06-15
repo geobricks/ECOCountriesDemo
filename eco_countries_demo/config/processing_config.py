@@ -69,7 +69,7 @@ processing = {
         },
         {
             "band": 1,
-            "output_file_name": "merge",
+            "output_file_name": "merge.tif",
             "process": [
                 {
                     "gdal_merge": {
@@ -81,7 +81,7 @@ processing = {
         },
         {
             "band": 1,
-            "output_file_name": "semi.tif",
+            "output_file_name": "warp.tif",
             "process": [
                 {
                     "get_pixel_size" : "{{PIXEL_SIZE}}"
@@ -93,7 +93,6 @@ processing = {
                             "-overwrite": "",
                             "-of": "GTiff",
                             "-s_srs": "'+proj=sinu +R=6371007.181 +nadgrids=@null +wktext'",
-                            # "-co": "'TILED=YES'",
                             "-t_srs": "EPSG:4326"
                         },
                         "prefix": "gdalwarp_",
@@ -109,7 +108,6 @@ processing = {
                 {
                     "gdal_translate": {
                         "opt": {
-                            # "-co": "'TILED=YES'",
                             "-co": "'COMPRESS=DEFLATE'"
                         }
                     }
