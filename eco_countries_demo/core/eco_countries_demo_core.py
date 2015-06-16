@@ -5,10 +5,12 @@ from os import listdir
 from os.path import isfile
 from os.path import join
 import os.path
+from geobricks_common.core.date import day_of_the_year_to_date
 from geobricks_modis.core import modis_core as c
 from geobricks_processing.core import processing_core
 from geobricks_downloader.core.downloader_core import Downloader
 from eco_countries_demo.config.processing_config import processing
+
 
 
 class ECOCountriesDownloader:
@@ -16,7 +18,7 @@ class ECOCountriesDownloader:
     years = None
     products = None
     countries = None
-    root = '/home/kalimaha/Desktop/'
+    root = '/home/vortex/Desktop/LAYERS/ECO_COUNTRIES/'
 
     def __init__(self):
         pass
@@ -29,7 +31,7 @@ class ECOCountriesDownloader:
 
     def process_ndvi(self):
         self.products = ['MOD13A3']
-        self.years = ['2015']
+        self.years = ['2011', '2012', '2013', '2014', '2015']
         self.countries = 'eco'
         self.__process('mod13a3')
 
@@ -101,7 +103,8 @@ class ECOCountriesDownloader:
                                                                                      y + '/' +
                                                                                      d['code'] + '/' +
                                                                                      l['file_name'])
-                            except KeyError:
+                            except Exception, e:
+                                print e
                                 my_processing[product_code][0]['source_path'] = []
                                 my_processing[product_code][0]['source_path'].append(self.root +
                                                                                      p + '/' +
@@ -133,7 +136,12 @@ class ECOCountriesDownloader:
                 if 'final.tif' in os.path.join(path, name):
                     day = self.get_parent_folder(self.get_parent(os.path.join(path, name)))
                     year = self.get_parent_folder(self.get_parent(self.get_parent(os.path.join(path, name))))
-                    new_name = product_code.upper() + '_' + year + '_' + day + '.tif'
+                    d = day_of_the_year_to_date(day, year)
+
+                    # get date
+                    date = str(d.year) + '0' + str(d.month)  if d.month < 10 else str(d.year) + str(d.month)
+                    prj = '3857'
+                    new_name = product_code.upper() + '_' + date + '_' + prj + '.tif'
                     shutil.copyfile(os.path.join(path, name), os.path.join(self.root, product_code.upper(), new_name))
 
     def get_parent(self, file_path):
@@ -148,8 +156,8 @@ class ECOCountriesDownloader:
 dwld = ECOCountriesDownloader()
 
 # dwld.download_ndvi()
-# dwld.process_ndvi()
+dwld.process_ndvi()
 dwld.prepare_output_ndvi()
 
 # dwld.download_mydc11()
-# dwld.process_mydc11()
+# dwld.process_mydc11()get_files
