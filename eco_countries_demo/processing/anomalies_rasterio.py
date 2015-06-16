@@ -24,15 +24,15 @@ def calc_anomalies(basepath, layers, filename, epsg="3857"):
             print "Processing: ", layer, " ", avg_path
             r = rasterio.open(layer)
             r_avg = rasterio.open(avg_path)
-            data, kwargs = initialize_rasterio_raster(r)
+            data, kwargs = initialize_rasterio_raster(r, rasterio.float32)
             r_band = r.read_band(1)
             r_avg_band = r_avg.read_band(1)
-            data = r_band - r_avg_band
+            data = r_band.astype(float) - r_avg_band.astype(float)
 
             # writing
             print "Writing: ", output_path
             with rasterio.open(output_path, 'w', **kwargs) as dst:
-                dst.write_band(1, data.astype(rasterio.uint16))
+                dst.write_band(1, data.astype(rasterio.float32))
 
 
 layers = glob.glob(basepath + "/*.tif")

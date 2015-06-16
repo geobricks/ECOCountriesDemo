@@ -20,22 +20,24 @@ def calc_monthly_average(basepath, filename, layers_by_month, epsg="3857"):
         data = None
         kwargs = None
 
-        print "Processing: ", str(month)
-        for f in layers_by_month[month]:
-            print "Reading: ",  f
-            r = rasterio.open(f)
+        if month == '07':
+            print "Processing: ", str(month)
+            for f in layers_by_month[month]:
+                print "Reading: ",  f
+                r = rasterio.open(f)
 
-            if data is None:
-                data, kwargs = initialize_rasterio_raster(r)
+                if data is None:
+                    data, kwargs = initialize_rasterio_raster(r, rasterio.float32)
 
-            data += r.read_band(1)
+                data += r.read_band(1).astype(float)
 
-        data / len(layers_by_month[month])
 
-        # writing
-        print "Writing: ", output_path
-        with rasterio.open(output_path, 'w', **kwargs) as dst:
-            dst.write_band(1, data.astype(rasterio.uint16))
+            data = data / len(layers_by_month[month])
+
+            # writing
+            print "Writing: ", output_path
+            with rasterio.open(output_path, 'w', **kwargs) as dst:
+                dst.write_band(1, data.astype(rasterio.float32))
 
 
 
