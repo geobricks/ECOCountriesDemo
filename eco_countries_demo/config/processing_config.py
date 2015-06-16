@@ -1,5 +1,5 @@
 processing = {
-    "myd11c1": [
+    "myd11c3": [
         {
             "band": 1,
             "process": [
@@ -58,7 +58,7 @@ processing = {
             ]
         }
     ],
-    "mod13a2": [
+    "mod13a3": [
         {
             "band": 1,
             "process": [
