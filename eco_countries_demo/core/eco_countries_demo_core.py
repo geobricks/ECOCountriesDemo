@@ -1,6 +1,10 @@
 import os
 import shutil
 import copy
+from os import listdir
+from os.path import isfile
+from os.path import join
+import os.path
 from geobricks_modis.core import modis_core as c
 from geobricks_processing.core import processing_core
 from geobricks_downloader.core.downloader_core import Downloader
@@ -21,7 +25,7 @@ class ECOCountriesDownloader:
         self.products = ['MOD13A3']
         self.years = ['2015']
         self.countries = 'eco'
-        self.__download('mod13a3')
+        self.__download()
 
     def process_ndvi(self):
         self.products = ['MOD13A3']
@@ -29,35 +33,29 @@ class ECOCountriesDownloader:
         self.countries = 'eco'
         self.__process('mod13a3')
 
+    def prepare_output_ndvi(self):
+        self.prepare_output('mod13a3')
+
     def download_mydc11(self):
         self.products = ['MYD11C3']
         self.years = ['2015']
         self.countries = 'eco'
-        self.__download('myd11c3')
+        self.__download()
 
-    def __download(self, product_code):
+    def process_mydc11(self):
+        self.products = ['MYD11C3']
+        self.years = ['2015']
+        self.countries = 'eco'
+        self.__process('myd11c3')
+
+    def __download(self):
         if self.products is not None and self.years is not None and self.countries is not None:
             for p in self.products:
                 for y in self.years:
                     days = c.list_days(p, y)
                     for d in days:
                         print 'DOWNLOADING ' + p + ' FOR ' + y + ', DAY: ' + d['code']
-                        # my_processing = copy.deepcopy(processing)
-                        # my_processing[product_code][0]['source_path'] = None
-                        # for tmp_out in my_processing[product_code]:
-                        #     tmp_out['output_path'] = None
-                        # if os.path.isdir(self.root + p + '/' + y + '/' + d['code'] + '/PROCESSED/'):
-                        #     shutil.rmtree(self.root + p + '/' + y + '/' + d['code'] + '/PROCESSED/')
                         layers = c.list_layers_countries_subset(p, y, d['code'], self.countries)
-                        # for l in layers:
-                        #     try:
-                        #         my_processing[product_code][0]['source_path'].append(self.root + p + '/' + y + '/' + d['code'] + '/' + l['file_name'])
-                        #     except Exception:
-                        #         my_processing[product_code][0]['source_path'] = []
-                        #         my_processing[product_code][0]['source_path'].append(self.root + p + '/' + y + '/' + d['code'] + '/' + l['file_name'])
-                        # for tmp_out in my_processing[product_code]:
-                        #     print '!!! OUTPUT PATH: ' + self.root + p + '/' + y + '/' + d['code'] + '/PROCESSED/'
-                        #     tmp_out['output_path'] = self.root + p + '/' + y + '/' + d['code'] + '/PROCESSED/'
                         my_downloader = Downloader('modis',
                                                    self.root,
                                                    {'product': p, 'year': y, 'day': d['code']},
@@ -70,35 +68,11 @@ class ECOCountriesDownloader:
                                 current = my_downloader.progress(layers[0]['file_name'])['download_size']
                                 total = my_downloader.progress(layers[0]['file_name'])['total_size']
                                 download_in_progress = current != total
-                            except TypeError, e:
+                            except TypeError:
                                 pass
                             except KeyError:
                                 pass
                         print 'Layer downloaded.'
-                        # print 'Start my_processing...'
-                        # try:
-                        #     print '##################################################'
-                        #     print '#                                                #'
-                        #     print '#                                                #'
-                        #     print '#                                                #'
-                        #     for s in my_processing[product_code][0]['source_path']:
-                        #         print '\t' + s
-                        #     print '#                                                #'
-                        #     print '#                                                #'
-                        #     print '#                                                #'
-                        #     print '##################################################'
-                        #     for proc in my_processing[product_code]:
-                        #         # processed_files = my_processing.process_data(my_processing[product_code])
-                        #         print proc
-                        #         proc["source_path"] = proc["source_path"] if "source_path" in proc else result
-                        #         result = processing_core.process_obj(proc)
-                        #         print result
-                        #     # processed_files = my_processing.process_data(processing[product_code])
-                        # except Exception, e:
-                        #     print '##################################################'
-                        #     print e
-                        #     print '##################################################'
-                        # print 'Processing done.'
         else:
             if self.products is None:
                 raise Exception('Please provide a valid "products" array.')
@@ -122,18 +96,24 @@ class ECOCountriesDownloader:
                         layers = c.list_layers_countries_subset(p, y, d['code'], self.countries)
                         for l in layers:
                             try:
-                                my_processing[product_code][0]['source_path'].append(self.root + p + '/' + y + '/' + d['code'] + '/' + l['file_name'])
-                            except Exception:
+                                my_processing[product_code][0]['source_path'].append(self.root +
+                                                                                     p + '/' +
+                                                                                     y + '/' +
+                                                                                     d['code'] + '/' +
+                                                                                     l['file_name'])
+                            except KeyError:
                                 my_processing[product_code][0]['source_path'] = []
-                                my_processing[product_code][0]['source_path'].append(self.root + p + '/' + y + '/' + d['code'] + '/' + l['file_name'])
+                                my_processing[product_code][0]['source_path'].append(self.root +
+                                                                                     p + '/' +
+                                                                                     y + '/' +
+                                                                                     d['code'] + '/' +
+                                                                                     l['file_name'])
                         for tmp_out in my_processing[product_code]:
-                            print '!!! OUTPUT PATH: ' + self.root + p + '/' + y + '/' + d['code'] + '/PROCESSED/'
                             tmp_out['output_path'] = self.root + p + '/' + y + '/' + d['code'] + '/PROCESSED/'
                         try:
                             for proc in my_processing[product_code]:
                                 proc["source_path"] = proc["source_path"] if "source_path" in proc else result
                                 result = processing_core.process_obj(proc)
-                                print result
                         except Exception, e:
                             print '##################################################'
                             print e
@@ -147,9 +127,29 @@ class ECOCountriesDownloader:
             if self.countries is None:
                 raise Exception('Please provide a valid "countries" comma separated string.')
 
+    def prepare_output(self, product_code):
+        for path, subdirs, files in os.walk(self.root + product_code.upper()):
+            for name in files:
+                if 'final.tif' in os.path.join(path, name):
+                    day = self.get_parent_folder(self.get_parent(os.path.join(path, name)))
+                    year = self.get_parent_folder(self.get_parent(self.get_parent(os.path.join(path, name))))
+                    new_name = product_code.upper() + '_' + year + '_' + day + '.tif'
+                    shutil.copyfile(os.path.join(path, name), os.path.join(self.root, product_code.upper(), new_name))
+
+    def get_parent(self, file_path):
+        return os.path.abspath(os.path.join(file_path, os.pardir))
+
+    def get_parent_folder(self, file_path):
+        parent_path = self.get_parent(file_path)
+        return parent_path[1 + parent_path.rfind('/'):]
+
 
 
 dwld = ECOCountriesDownloader()
+
 # dwld.download_ndvi()
-dwld.process_ndvi()
+# dwld.process_ndvi()
+dwld.prepare_output_ndvi()
+
 # dwld.download_mydc11()
+# dwld.process_mydc11()
