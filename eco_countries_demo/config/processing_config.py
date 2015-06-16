@@ -35,7 +35,7 @@ processing = {
                             "-of": "GTiff",
                             "-s_srs": "'+proj=sinu +R=6371007.181 +nadgrids=@null +wktext'",
                             "-co": "'TILED=YES'",
-                            "-t_srs": "EPSG:4326"
+                            "-t_srs": "EPSG:3857"
                         },
                         "prefix": "gdalwarp_",
                         "extension": "tif"
@@ -50,7 +50,7 @@ processing = {
                 {
                     "gdal_translate": {
                         "opt": {
-                            # "-co": "'TILED=YES'",
+                            "-co": "'TILED=YES'",
                             "-co": "'COMPRESS=DEFLATE'"
                         }
                     }
@@ -93,7 +93,7 @@ processing = {
                             "-overwrite": "",
                             "-of": "GTiff",
                             "-s_srs": "'+proj=sinu +R=6371007.181 +nadgrids=@null +wktext'",
-                            "-t_srs": "EPSG:4326"
+                            "-t_srs": "EPSG:3857"
                         },
                         "prefix": "gdalwarp_",
                         "extension": "tif"
@@ -108,6 +108,7 @@ processing = {
                 {
                     "gdal_translate": {
                         "opt": {
+                            "-co": "'TILED=YES'",
                             "-co": "'COMPRESS=DEFLATE'"
                         }
                     }
