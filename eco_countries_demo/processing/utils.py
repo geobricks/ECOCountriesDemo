@@ -37,6 +37,13 @@ def get_month_by_filename(f):
     return date[4:6]
 
 
+def get_date_by_filename(f):
+    filename = get_filename(f)
+    s = filename.split("_")
+    date = s[len(s)-2]
+    return date
+
+
 # get all layers of the same month
 def get_monthly_layers(path):
     layers_by_month = {}

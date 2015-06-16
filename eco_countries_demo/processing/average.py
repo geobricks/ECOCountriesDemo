@@ -15,8 +15,10 @@ def calc_monthly_average(basepath, filename, layers_by_month, epsg="3857"):
 
     for month in layers_by_month:
         output_path = basepath + "/" + filename + "_" + month + "_" + epsg + ".tif"
-        result = calc_layers(layers_by_month[month], output_path, "avg", ['--NoDataValue=-3000'])
-        print result
+        if month == '07':
+            print layers_by_month[month]
+            result = calc_layers(layers_by_month[month], output_path, "sum", ['--NoDataValue=-3000'])
+
 
 
 
