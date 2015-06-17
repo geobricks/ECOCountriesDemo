@@ -1,47 +1,53 @@
 import glob
 import os
 import rasterio
+from geobricks_common.core.filesystem import get_filename
 from eco_countries_demo.processing.utils_rasterio import initialize_rasterio_raster
-from eco_countries_demo.processing.utils import get_monthly_layers
+from eco_countries_demo.processing.utils import get_date_by_filename
 
+# the calc is of the zscore is = avg / variance
 
-def calc_variance(basepath, filename, layers_by_month, epsg="3857"):
-    print "-----Variance"
+def calc(basepath, filename, epsg="3857"):
+    print "-----ZSCORE"
 
-    for month in layers_by_month:
-        print month
-        output_path = basepath + "/" + filename + "_" + month + "_" + epsg + ".tif"
+    layers_avg = glob.glob(basepath + "/avg/*.tif")
+    #layers_variance = glob.glob(basepath + "/variance/*.tif")
+    layers_variance = glob.glob(basepath + "/sd/*.tif")
 
-        data = None
-        kwargs = None
+    for layer_avg in layers_avg:
 
-        if month == '07':
-            print "Processing: ", str(month)
-            for f in layers_by_month[month]:
-                print "Reading: ",  f
-                r = rasterio.open(f)
+        month_avg = get_date_by_filename(layer_avg)
+        layer_variance = get_layer_variance_by_month(layers_variance, month_avg)
 
-                if data is None:
-                    data, kwargs = initialize_rasterio_raster(r, rasterio.float32)
+        if month_avg == '07':
+            print "Processing: ", str(month_avg)
+            print "Reading: ",  layer_avg
+            r_avg = rasterio.open(layer_avg)
+            print "Reading: ",  layer_variance
+            r_variance = rasterio.open(layer_variance)
 
-                band_data = r.read_band(1).astype(float)
+            data, kwargs = initialize_rasterio_raster(r_avg, rasterio.float32)
 
-                sq = (band_data * band_data)
+            r_avg_band_data = r_avg.read_band(1).astype(float)
+            r_variance_band_data = r_variance.read_band(1).astype(float)
 
-                # sum of squares
-                data = data + sq
-
-            # divide by n-1
-            data = data / (len(layers_by_month[month]) - 1)
+            data = r_avg_band_data / r_variance_band_data
 
             # writing
+            filename = get_filename(layer_avg)
+            output_path = basepath + "/zscore/" + filename + ".tif"
             print "Writing: ", output_path
             with rasterio.open(output_path, 'w', **kwargs) as dst:
                 dst.write_band(1, data.astype(rasterio.float32))
 
 
+def get_layer_variance_by_month(layers, month):
+    for l in layers:
+        if month == get_date_by_filename(l):
+            return l
+
 def process_all():
     basepath = "/home/vortex/Desktop/LAYERS/ECO_COUNTRIES/MOD13A3"
-    layers_by_month = get_monthly_layers(basepath + "/anomalies/*.tif")
-    calc_variance(basepath + "/variance", "MOD13A3", layers_by_month)
+    calc(basepath, "MOD13A3")
 
+#process_all()

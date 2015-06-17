@@ -3,6 +3,7 @@ import os
 import rasterio
 from eco_countries_demo.processing.utils_rasterio import initialize_rasterio_raster
 from eco_countries_demo.processing.utils import get_monthly_layers
+import numpy
 
 
 def calc_variance(basepath, filename, layers_by_month, epsg="3857"):
@@ -32,7 +33,7 @@ def calc_variance(basepath, filename, layers_by_month, epsg="3857"):
                 data = data + sq
 
             # divide by n-1
-            data = data / (len(layers_by_month[month]) - 1)
+            data = numpy.sqrt(data / (len(layers_by_month[month]) - 1))
 
             # writing
             print "Writing: ", output_path
@@ -43,5 +44,4 @@ def calc_variance(basepath, filename, layers_by_month, epsg="3857"):
 def process_all():
     basepath = "/home/vortex/Desktop/LAYERS/ECO_COUNTRIES/MOD13A3"
     layers_by_month = get_monthly_layers(basepath + "/anomalies/*.tif")
-    calc_variance(basepath + "/variance", "MOD13A3", layers_by_month)
-
+    calc_variance(basepath + "/sd", "MOD13A3", layers_by_month)
