@@ -108,6 +108,7 @@ processing = {
                 {
                     "gdal_translate": {
                         "opt": {
+                            "-a_nodata": "-3000",
                             "-co": "'TILED=YES'",
                             "-co": "'COMPRESS=DEFLATE'"
                         }
