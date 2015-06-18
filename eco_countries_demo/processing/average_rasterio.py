@@ -1,12 +1,6 @@
-import glob
-import os
 import rasterio
-import numpy
 from eco_countries_demo.processing.utils_rasterio import initialize_rasterio_raster
-from geobricks_common.core.filesystem import get_filename
 from eco_countries_demo.processing.utils import get_monthly_layers
-from geobricks_gdal_calc.core.gdal_calc import calc_layers
-from eco_countries_demo.processing.utils import get_files
 
 
 def calc_monthly_average(basepath, filename, layers_by_month, epsg="3857"):
@@ -18,7 +12,6 @@ def calc_monthly_average(basepath, filename, layers_by_month, epsg="3857"):
         data = None
         kwargs = None
 
-        # if month == '07':
         print "Processing: ", str(month)
         for f in layers_by_month[month]:
             print "Reading: ",  f

@@ -1,12 +1,7 @@
 import glob
-import os
 import rasterio
-import numpy
 from eco_countries_demo.processing.utils_rasterio import initialize_rasterio_raster
-from geobricks_common.core.filesystem import get_filename
-from eco_countries_demo.processing.utils import get_monthly_layers, get_month_by_filename, get_date_by_filename
-from geobricks_gdal_calc.core.gdal_calc import calc_layers
-from eco_countries_demo.processing.utils import get_files
+from eco_countries_demo.processing.utils import get_month_by_filename, get_date_by_filename
 
 
 def calc_anomalies(basepath, layers, filename, epsg="3857"):

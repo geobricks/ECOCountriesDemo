@@ -7,6 +7,5 @@ from eco_countries_demo.processing import zscore_rasterio
 
 average_rasterio.process_all()
 anomalies_rasterio.process_all()
-#variance_rasterio.process_all()
-standard_deviation_rasterio.process_all()
-zscore_rasterio.process_all()
+# standard_deviation_rasterio.process_all()
+# zscore_rasterio.process_all()

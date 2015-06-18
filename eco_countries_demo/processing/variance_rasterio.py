@@ -1,5 +1,3 @@
-import glob
-import os
 import rasterio
 from eco_countries_demo.processing.utils_rasterio import initialize_rasterio_raster
 from eco_countries_demo.processing.utils import get_monthly_layers
