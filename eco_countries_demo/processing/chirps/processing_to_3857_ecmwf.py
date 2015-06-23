@@ -15,7 +15,7 @@ def process_tifs_warp(input_path, output_path):
         filename = get_filename(f)
         output_file_path = output_path + "/" + filename + ".tif"
         print output_file_path
-        cmd = "gdalwarp -s_srs EPSG:4326 -t_srs EPSG:3857 -overwrite '" + f + "' '" + output_file_path + "'"
+        cmd = "gdalwarp -s_srs EPSG:4326 -t_srs EPSG:3857 -overwrite -co TILED=YES -co COMPRESS=DEFLATE '" + f + "' '" + output_file_path + "'"
         print cmd
         process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
         output, error = process.communicate()
@@ -50,23 +50,23 @@ def add_gdaladdo(output_file_path):
     print error
 
 
-def process_chirps():
+def process_ECMWF():
 
-    input_path = "/media/vortex/LaCie/LaCie/ECO_COUNTRIES/original/chirps/"
-    output_path = "/media/vortex/LaCie/LaCie/ECO_COUNTRIES/CHIRPS_3857/"
+    input_path = "/media/vortex/LaCie/LaCie/ECO_COUNTRIES/original/ecmwf/RAIN/MONTHLY/"
+    output_path = "/media/vortex/LaCie/LaCie/ECO_COUNTRIES/original/3857/ECMWF/"
 
     # WARP
     process_tifs_warp(input_path, output_path)
-    process_tifs_warp(input_path + "/MEAN", output_path + "/CHIRPS_AVG")
-    process_tifs_warp(input_path + "/ANOMALY", output_path + "/CHIRPS_ANOMALY")
-    process_tifs_warp(input_path + "/ZSCORES", output_path + "/CHIRPS_ZSCORE")
+    # process_tifs_warp(input_path + "/MEAN", output_path + "/ECMWF_AVG")
+    # process_tifs_warp(input_path + "/ANOMALY", output_path + "/ECMWF_ANOMALY")
+    # process_tifs_warp(input_path + "/ZSCORES", output_path + "/ECMWF_ZSCORE")
 
     # translate + gdaladdo
-    input_path = "/media/vortex/LaCie/LaCie/ECO_COUNTRIES/CHIRPS_3857"
-    output_path = "/media/vortex/LaCie/LaCie/ECO_COUNTRIES/CHIRPS/"
+    input_path = "/media/vortex/LaCie/LaCie/ECO_COUNTRIES/original/3857/ECMWF/"
+    output_path = "/media/vortex/LaCie/LaCie/ECO_COUNTRIES/ECMWF/"
     process_tifs_translate(input_path, output_path)
-    process_tifs_translate(input_path + "/CHIRPS_AVG", output_path + "/CHIRPS_AVG")
-    process_tifs_translate(input_path + "/CHIRPS_ANOMALY", output_path + "/CHIRPS_ANOMALY")
-    process_tifs_translate(input_path + "/CHIRPS_ZSCORE", output_path + "/CHIRPS_ZSCORE")
+    # process_tifs_translate(input_path + "/ECMWF_AVG", output_path + "/ECMWF_AVG")
+    # process_tifs_translate(input_path + "/ECMWF_ANOMALY", output_path + "/ECMWF_ANOMALY")
+    # process_tifs_translate(input_path + "/ECMWF_ZSCORE", output_path + "/ECMWF_ZSCORE")
 
-process_chirps()
+process_ECMWF()

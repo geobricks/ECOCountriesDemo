@@ -9,12 +9,19 @@ def rename(path, from_basename, to_basename):
 
     for f in files:
         if os.path.isfile(f):
-            new_filename = get_filename(f).replace(from_basename, to_basename) + "_3857.tif"
+            new_filename = get_filename(f).replace(from_basename, to_basename).replace(".", "") + "_3857.tif"
+            print "Rename:", get_filename(f), "to:", new_filename
             os.rename(f, path + "/" + new_filename)
 
 
-# path = "/media/vortex/LaCie/LaCie/ECO_COUNTRIES/ECMWF/"
-# rename(path, "RAIN", "Rainfall")
+#path = "/media/vortex/LaCie/LaCie/ECO_COUNTRIES/CHIRPS/"
+# rename(path, "RAIN", "Rainfall_6km_CHIRPS")
+
+#rename(path + "/CHIRPS_AVG", "avg", "Rainfall_Average_6km_CHIRPS")
+
+#rename(path + "/CHIRPS_ANOMALY", "anom.", "Rainfall_Anomaly_6km_CHIRPS_")
+#rename(path + "/CHIRPS_ZSCORE", "zscore.", "Rainfall_ZScore_6km_CHIRPS_")
+
 
 #path = "/media/vortex/LaCie/LaCie/ECO_COUNTRIES/MOD16/ET/ET/ET_ANOMALY/"
 #rename(path + "/ECMWF_ANOMALY, "6km_Anomaly", "Anomaly_6km")
