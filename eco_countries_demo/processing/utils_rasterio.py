@@ -8,7 +8,7 @@ def initialize_rasterio_raster(r, dtype, nodata=None, parameters=None):
     kwargs.update(
         dtype=dtype,
         count=1,
-        #compress='lzw'
+        compress='lzw'
         #nodata=-3000
     )
     return data, kwargs

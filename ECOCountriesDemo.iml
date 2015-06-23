@@ -2,11 +2,10 @@
 <module type="PYTHON_MODULE" version="4">
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
-    <content url="file://$MODULE_DIR$">
-      <sourceFolder url="file://$MODULE_DIR$/eco_countries_demo" isTestSource="false" />
-    </content>
+    <content url="file://$MODULE_DIR$" />
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="geobricks_gdal_calc" />
     <orderEntry type="module" module-name="geobricks_common" />
     <orderEntry type="module" module-name="geobricks_downloader" />
     <orderEntry type="module" module-name="geobricks_modis" />

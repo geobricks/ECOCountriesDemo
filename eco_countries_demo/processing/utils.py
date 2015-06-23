@@ -36,12 +36,24 @@ def get_month_by_filename(f):
     date = s[len(s)-2]
     return date[4:6]
 
+def get_year_by_filename(f):
+    filename = get_filename(f)
+    s = filename.split("_")
+    date = s[len(s)-2]
+    return date[:4]
 
 def get_date_by_filename(f):
     filename = get_filename(f)
     s = filename.split("_")
     date = s[len(s)-2]
     return date
+
+
+def get_base_filename(f):
+    filename = get_filename(f)
+    s = filename.split("_")
+    # return ', '.s[len(s)-3]
+    return '_'.join(s[:len(s)-2])
 
 
 # get all layers of the same month
