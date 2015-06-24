@@ -1,16 +1,12 @@
 import os
-import shutil
 import copy
-from os import listdir
-from os.path import isfile
-from os.path import join
+import shutil
 import os.path
-from geobricks_common.core.date import day_of_the_year_to_date
 from geobricks_modis.core import modis_core as c
 from geobricks_processing.core import processing_core
+from geobricks_common.core.date import day_of_the_year_to_date
 from geobricks_downloader.core.downloader_core import Downloader
 from eco_countries_demo.config.processing_config import processing
-
 
 
 class ECOCountriesDownloader:
@@ -18,37 +14,52 @@ class ECOCountriesDownloader:
     years = None
     products = None
     countries = None
-    root = '/home/vortex/Desktop/LAYERS/ECO_COUNTRIES/'
+    root = '/home/kalimaha/Desktop/'
 
     def __init__(self):
         pass
 
     def download_ndvi(self):
-        self.products = ['MOD13A3']
+        self.products = ['MOD13A1']
         self.years = ['2015']
-        self.countries = 'eco'
+        self.countries = 'za'
         self.__download()
 
     def process_ndvi(self):
-        self.products = ['MOD13A3']
-        self.years = ['2011', '2012', '2013', '2014', '2015']
-        self.countries = 'eco'
-        self.__process('mod13a3')
+        self.products = ['MOD13A1']
+        self.years = ['2015']
+        self.countries = 'za'
+        self.__process('mod13a1')
 
     def prepare_output_ndvi(self):
-        self.prepare_output('mod13a3')
+        self.prepare_output('mod13a1')
 
-    def download_mydc11(self):
+    def download_mydc13(self):
         self.products = ['MYD11C3']
-        self.years = ['2015']
+        self.years = ['2014', '2013', '2012',
+                      '2011', '2010', '2009', '2008', '2007', '2006',
+                      '2005', '2004', '2003', '2002', '2001', '2000']
         self.countries = 'eco'
         self.__download()
 
-    def process_mydc11(self):
+    def process_mydc13(self):
         self.products = ['MYD11C3']
-        self.years = ['2015']
+        self.years = ['2014', '2013', '2012',
+                      '2011', '2010', '2009', '2008', '2007', '2006',
+                      '2005', '2004', '2003', '2002', '2001', '2000']
         self.countries = 'eco'
         self.__process('myd11c3')
+
+    def prepare_output_mydc13(self):
+        self.prepare_output('myd11c3')
+
+    def process_mod16(self):
+        self.products = ['MOD16']
+        self.years = ['2014', '2013', '2012',
+                      '2011', '2010', '2009', '2008', '2007', '2006',
+                      '2005', '2004', '2003', '2002', '2001', '2000']
+        self.countries = 'eco'
+        self.__process('mod16')
 
     def __download(self):
         if self.products is not None and self.years is not None and self.countries is not None:
@@ -61,8 +72,7 @@ class ECOCountriesDownloader:
                         my_downloader = Downloader('modis',
                                                    self.root,
                                                    {'product': p, 'year': y, 'day': d['code']},
-                                                   layers,
-                                                   True)
+                                                   layers)
                         my_downloader.download()
                         download_in_progress = True
                         while download_in_progress:
@@ -103,8 +113,7 @@ class ECOCountriesDownloader:
                                                                                      y + '/' +
                                                                                      d['code'] + '/' +
                                                                                      l['file_name'])
-                            except Exception, e:
-                                print e
+                            except AttributeError:
                                 my_processing[product_code][0]['source_path'] = []
                                 my_processing[product_code][0]['source_path'].append(self.root +
                                                                                      p + '/' +
@@ -137,11 +146,10 @@ class ECOCountriesDownloader:
                     day = self.get_parent_folder(self.get_parent(os.path.join(path, name)))
                     year = self.get_parent_folder(self.get_parent(self.get_parent(os.path.join(path, name))))
                     d = day_of_the_year_to_date(day, year)
-
-                    # get date
                     date = str(d.year) + '0' + str(d.month)  if d.month < 10 else str(d.year) + str(d.month)
                     prj = '3857'
                     new_name = product_code.upper() + '_' + date + '_' + prj + '.tif'
+                    print 'COPYING: ' + os.path.join(path, name) + '...'
                     shutil.copyfile(os.path.join(path, name), os.path.join(self.root, product_code.upper(), new_name))
 
     def get_parent(self, file_path):
@@ -155,9 +163,10 @@ class ECOCountriesDownloader:
 
 dwld = ECOCountriesDownloader()
 
-# dwld.download_ndvi()
-dwld.process_ndvi()
+dwld.download_ndvi()
+# dwld.process_ndvi()
 dwld.prepare_output_ndvi()
 
-# dwld.download_mydc11()
-# dwld.process_mydc11()get_files
+# dwld.download_mydc13()
+# dwld.process_mydc13()
+# dwld.prepare_output_mydc13()
