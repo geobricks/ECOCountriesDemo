@@ -28,6 +28,9 @@ def calc(basepath, layers, filename, epsg="3857"):
 
 def process_all():
     print "-----Z-SCORE"
-    basepath = "/home/vortex/Desktop/LAYERS/ECO_COUNTRIES/MOD13A3"
+    basepath = "/media/vortex/LaCie/LaCie/ECO_COUNTRIES/CHIRPS/"
     layers = glob.glob(basepath + "/anomalies/*.tif")
-    calc(basepath, layers, "MOD13A3")
+    calc(basepath, layers, "CHIRPS")
+
+
+# process_all()

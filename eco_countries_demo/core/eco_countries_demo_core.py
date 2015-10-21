@@ -14,7 +14,7 @@ class ECOCountriesDownloader:
     years = None
     products = None
     countries = None
-    root = '/home/kalimaha/Desktop/'
+    root = '/home/vortex/Desktop/nena/'
 
     def __init__(self):
         pass
@@ -165,7 +165,7 @@ dwld = ECOCountriesDownloader()
 
 dwld.download_ndvi()
 # dwld.process_ndvi()
-dwld.prepare_output_ndvi()
+#dwld.prepare_output_ndvi()
 
 # dwld.download_mydc13()
 # dwld.process_mydc13()

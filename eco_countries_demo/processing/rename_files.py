@@ -13,6 +13,9 @@ def rename(path, from_basename, to_basename):
             os.rename(f, path + "/" + new_filename)
 
 
+# path = "/media/vortex/LaCie/LaCie/ECO_COUNTRIES/MYD11C3/MYD11C3_ZSCORE/"
+# rename(path, "LST_ZScore_6km_MYD11C3_200304", "LST_ZScore_6km_MYD11C3")
+
 #path = "/media/vortex/LaCie/LaCie/ECO_COUNTRIES/MYD11C3/MYD11C3_ZSCORE/"
 #rename(path, "6km_ZScore", "ZScore_6km")
 #

@@ -1,10 +1,14 @@
 import rasterio
+import os
 from eco_countries_demo.processing.utils_rasterio import initialize_rasterio_raster
 from eco_countries_demo.processing.utils import get_monthly_layers
 
 
 def calc_monthly_average(basepath, filename, layers_by_month, epsg="3857"):
     print "-----Averages"
+
+    if not os.path.exists(basepath):
+        os.makedirs(basepath)
 
     for month in layers_by_month:
         output_path = basepath + "/" + filename + "_" + month + "_" + epsg + ".tif"
@@ -32,8 +36,9 @@ def calc_monthly_average(basepath, filename, layers_by_month, epsg="3857"):
 
 
 def process_all():
-    basepath = "/home/vortex/Desktop/LAYERS/ECO_COUNTRIES/MOD13A3"
+    basepath = "/media/vortex/LaCie/LaCie/ECO_COUNTRIES/CHIRPS/"
     layers_by_month = get_monthly_layers(basepath + "/*.tif")
-    calc_monthly_average(basepath + "/avg", "MOD13A3", layers_by_month)
+    calc_monthly_average(basepath + "/avg", "CHIRPS", layers_by_month)
 
 
+# process_all()

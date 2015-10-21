@@ -1,4 +1,5 @@
 import glob
+import os
 import rasterio
 from eco_countries_demo.processing.utils_rasterio import initialize_rasterio_raster
 from eco_countries_demo.processing.utils import get_month_by_filename, get_date_by_filename
@@ -30,10 +31,10 @@ def calc_anomalies(basepath, layers, filename, epsg="3857"):
 
 
 def process_all():
-    basepath = "/home/vortex/Desktop/LAYERS/ECO_COUNTRIES/MOD13A3"
+    basepath = "/media/vortex/LaCie/LaCie/ECO_COUNTRIES/CHIRPS"
     layers = glob.glob(basepath + "/*.tif")
-    calc_anomalies(basepath, layers, "MOD13A3")
+    calc_anomalies(basepath, layers, "CHIRPS")
 
 
 
-
+# process_all()

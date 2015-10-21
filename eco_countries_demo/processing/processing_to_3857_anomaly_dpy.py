@@ -34,21 +34,21 @@ def add_gdaladdo(output_file_path):
 def process():
 
 
-    input_path = "/media/vortex/LaCie/LaCie/ECO_COUNTRIES/MYD11C3/MYD11C3_ANOMALY_DPY/original"
-    output_path = "/media/vortex/LaCie/LaCie/ECO_COUNTRIES/MYD11C3/MYD11C3_ANOMALY_DPY"
-    process_tifs_translate(input_path, output_path, 'LST_', 'LST_Anomaly_DPY_')
-
-    input_path = "/media/vortex/LaCie/LaCie/ECO_COUNTRIES/MOD16/ET/ET/ET_ANOMALY_DPY/original"
-    output_path = "/media/vortex/LaCie/LaCie/ECO_COUNTRIES/MOD16/ET/ET/ET_ANOMALY_DPY"
-    process_tifs_translate(input_path, output_path, 'ET_', 'ET_Anomaly_DPY_')
+    # input_path = "/media/vortex/LaCie/LaCie/ECO_COUNTRIES/MYD11C3/MYD11C3_ANOMALY_DPY/original"
+    # output_path = "/media/vortex/LaCie/LaCie/ECO_COUNTRIES/MYD11C3/MYD11C3_ANOMALY_DPY"
+    # process_tifs_translate(input_path, output_path, 'LST_', 'LST_Anomaly_DPY_')
+    #
+    # input_path = "/media/vortex/LaCie/LaCie/ECO_COUNTRIES/MOD16/ET/ET/ET_ANOMALY_DPY/original"
+    # output_path = "/media/vortex/LaCie/LaCie/ECO_COUNTRIES/MOD16/ET/ET/ET_ANOMALY_DPY"
+    # process_tifs_translate(input_path, output_path, 'ET_', 'ET_Anomaly_DPY_')
 
     input_path = "/media/vortex/LaCie/LaCie/ECO_COUNTRIES/CHIRPS/CHIRPS_ANOMALY_DPY/original"
     output_path = "/media/vortex/LaCie/LaCie/ECO_COUNTRIES/CHIRPS/CHIRPS_ANOMALY_DPY"
     process_tifs_translate(input_path, output_path, 'Rainfall_', 'Rainfall_Anomaly_DPY_')
 
-    input_path = "/media/vortex/LaCie/LaCie/ECO_COUNTRIES/MOD13A3/MOD13A3_ANOMALY_DPY/original"
-    output_path = "/media/vortex/LaCie/LaCie/ECO_COUNTRIES/MOD13A3/MOD13A3_ANOMALY_DPY"
-    process_tifs_translate(input_path, output_path, 'NDVI_', 'NDVI_Anomaly_DPY_')
+    # input_path = "/media/vortex/LaCie/LaCie/ECO_COUNTRIES/MOD13A3/MOD13A3_ANOMALY_DPY/original"
+    # output_path = "/media/vortex/LaCie/LaCie/ECO_COUNTRIES/MOD13A3/MOD13A3_ANOMALY_DPY"
+    # process_tifs_translate(input_path, output_path, 'NDVI_', 'NDVI_Anomaly_DPY_')
 
 
 process()
