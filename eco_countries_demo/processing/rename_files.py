@@ -28,8 +28,8 @@ def rename(path, from_basename, to_basename):
 #path = "/media/vortex/LaCie/LaCie/ECO_COUNTRIES/MOD16/ET/ET/ET_SD/"
 #rename(path, "MOD16A2", "SD#_MOD16A2")
 #
-#path = "/media/vortex/LaCie/LaCie/ECO_COUNTRIES/MYD11C3/MYD11C3_ZSCORE/"
-#rename(path, "MYD11C3", "ZScore_MYD11C3")
+# path = "/media/vortex/LaCie/NENA_REGION/NENA_MOD13A3/NENA_MOD13A3_ANOMALY/"
+# rename(path, "MOD13A3", "NDVI_Anomaly_1km_MOD13A3")
 
 #
 # # rename folders

@@ -33,6 +33,7 @@ def calc_anomalies(basepath, layers, filename, epsg="3857"):
 
 def process_all():
     basepath = "/media/vortex/LaCie/LaCie/ECO_COUNTRIES/CHIRPS"
+
     layers = glob.glob(basepath + "/*.tif")
     calc_anomalies(basepath, layers, "CHIRPS")
 

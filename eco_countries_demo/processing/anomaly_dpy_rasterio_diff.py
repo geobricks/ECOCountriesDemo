@@ -50,10 +50,16 @@ def calc(basepath, output_path, layers, epsg="3857"):
 
 
 def process_all():
-    basepath = "/media/vortex/LaCie/LaCie/ECO_COUNTRIES/MYD11C3"
-    output_path = basepath + "/MYD11C3_ANOMALY_DPY"
+    basepath = "/media/vortex/LaCie/LaCie/ECO_COUNTRIES/CHIRPS"
+    output_path = basepath + "/anomalies_dpy"
     layers = glob.glob(basepath + "/*.tif")
     calc(basepath, output_path, layers)
+
+
+    # basepath = "/media/vortex/LaCie/LaCie/ECO_COUNTRIES/MYD11C3"
+    # output_path = basepath + "/MYD11C3_ANOMALY_DPY"
+    # layers = glob.glob(basepath + "/*.tif")
+    # calc(basepath, output_path, layers)
 
     #
     # basepath = "/media/vortex/LaCie/LaCie/ECO_COUNTRIES/MOD16/ET/ET"
